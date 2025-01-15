@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import Depends, FastAPI, HTTPException, status, Response, File, UploadFile
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.testclient import TestClient
 
 from pydantic import BaseModel
 from datetime import datetime, timedelta
@@ -176,3 +177,16 @@ async def create_upload_file(file: UploadFile = File(...)):
         while contents := file.file.read(1024 * 1024):
             buffer.write(contents)
     return {"filename": file.filename}
+
+@app.get("/")
+async def read_main():
+    return {"msg": "Hello World"}
+
+
+client = TestClient(app)
+
+
+def test_read_main():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"msg": "Hello World"}

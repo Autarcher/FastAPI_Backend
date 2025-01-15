@@ -17,7 +17,7 @@ def create_db_and_tables(get_settings: Callable[[], AppSettings]):
 
     # we'll turn off this verbose logging of queries in production:
     # echo = settings.testing
-    echo = False
+    echo = True
     # 使用同步engine创建数据库
     engine = create_engine(
         settings.mysql.database_url.replace("mysql+aiomysql", "mysql+pymysql"), echo=echo
