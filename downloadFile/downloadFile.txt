@@ -1,0 +1,5 @@
+#cloud-config
+bootcmd:
+ - mkdir -p  $(cat /etc/tipu_vfs_mount_point)
+ - mount -t virtiofs $(cat /etc/tipu_vfs_tag)  $(cat /etc/tipu_vfs_mount_point)
+ - cp /etc/tipu_vfs_eerk2  $(cat /etc/tipu_vfs_mount_point)/eerk2

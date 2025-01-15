@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS Test</title>
+</head>
+<body>
+    <h1>CORS Test with FastAPI</h1>
+    <input type="text" id="filenameInput" placeholder="Enter filename">
+    <button onclick="fetchData()">Download File</button>
+    <script>
+        async function fetchData() {
+            try {
+                // 获取用户输入的文件名
+                const filename = document.getElementById('filenameInput').value;
+                if (!filename) {
+                    alert('Please enter a filename');
+                    return;
+                }
+                const url = `http://10.13.3.184:8000/download/${filename}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'accept': 'application/octet-stream',
+                        'Origin': 'http://10.13.3.184:8000' // 添加 Origin 头
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('HTTP error ' + response.status);
+                }
+                const blob = await response.blob();
+                const fileURL = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = fileURL;
+                a.download = filename; // 使用用户输入的文件名作为下载的文件名
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(fileURL);
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
