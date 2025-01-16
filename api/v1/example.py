@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query, Cookie, Header
+from fastapi import APIRouter, Depends, Query, Cookie, Header, BackgroundTasks
 from typing import Annotated
 from module.example import User, CommonHeaders, UserBase
 from module.cookie import Cookies, CookieBase
@@ -6,7 +6,7 @@ from services.example import ExampleService
 from datetime import datetime
 router = APIRouter(tags=["example"])
 
-@router.get("/example/want", response_model=str, include_in_schema=False)
+@router.get("/example/want", response_model=str, include_in_schema=True)
 async def example(want:str, inputId:str = None):
     time:str = Depends(datetime.now)
     ret = f"{inputId} want:{want} time:{time}"
