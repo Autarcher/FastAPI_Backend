@@ -8,6 +8,7 @@ from api import router
 from loguru import logger
 import uvicorn
 
+items = {}
 
 templates = Jinja2Templates(directory="templates")
 servers = [
@@ -25,6 +26,12 @@ def create_app():
                   root_path="/api/v1",
                   )
     app.mount("/static", StaticFiles(directory="static"), name="static")
+
+    @app.on_event("startup")
+    async def startup_event():
+        items["foo"] = {"name": "Fighters"}
+        items["bar"] = {"name": "Tenders"}
+        
     @app.get("/")
     async def root():
         return {"message": "Hello World"}
